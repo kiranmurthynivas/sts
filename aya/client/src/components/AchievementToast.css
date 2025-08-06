@@ -1,0 +1,467 @@
+/* Achievement Toast & Notification System */
+
+.achievement-toast-container {
+  position: fixed;
+  top: var(--space-6);
+  right: var(--space-6);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.achievement-toast {
+  background: var(--gradient-success);
+  color: var(--white);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-xl), var(--shadow-success-glow);
+  transform: translateX(400px);
+  animation: slideInBounce 0.6s ease-out forwards, fadeOut 0.5s ease-in 4s forwards;
+  pointer-events: auto;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.achievement-toast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shine 2s ease-in-out infinite;
+}
+
+.achievement-toast.streak-achievement {
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 212, 255, 0.6);
+}
+
+.achievement-toast.punishment-toast {
+  background: var(--gradient-danger);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(255, 51, 102, 0.6);
+  animation: slideInBounce 0.6s ease-out forwards, shameShake 0.5s ease-in-out 1s, fadeOut 0.5s ease-in 5s forwards;
+}
+
+.achievement-toast.reward-toast {
+  background: var(--gradient-meme);
+  color: var(--black);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(255, 215, 0, 0.8);
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.toast-icon {
+  font-size: var(--text-2xl);
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.toast-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.toast-message {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+  margin-bottom: var(--space-2);
+}
+
+.toast-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-xs);
+  opacity: 0.9;
+}
+
+.toast-amount {
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family-mono);
+}
+
+.toast-close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--transition-normal);
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+/* Forgiveness Modal */
+.forgiveness-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.forgiveness-modal {
+  background: var(--gradient-dark);
+  border: 2px solid var(--matic-purple);
+  border-radius: var(--radius-3xl);
+  padding: var(--space-12);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: modalBounce 0.5s ease-out;
+  box-shadow: var(--shadow-xl), 0 0 50px rgba(130, 71, 229, 0.4);
+}
+
+.forgiveness-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+}
+
+.forgiveness-mascot {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-6);
+  animation: float 2s ease-in-out infinite;
+  display: block;
+}
+
+.forgiveness-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.forgiveness-message {
+  color: var(--gray-300);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.6;
+  margin-bottom: var(--space-8);
+}
+
+.forgiveness-buttons {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+}
+
+.forgiveness-btn {
+  padding: var(--space-4) var(--space-8);
+  border: none;
+  border-radius: var(--radius-2xl);
+  font-family: var(--font-family);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.forgiveness-btn.accept {
+  background: var(--gradient-success);
+  color: var(--white);
+  box-shadow: var(--shadow-success-glow);
+}
+
+.forgiveness-btn.accept:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 255, 136, 0.6);
+}
+
+.forgiveness-btn.accept::before {
+  content: '🙏';
+  margin-right: var(--space-2);
+  font-size: var(--text-xl);
+}
+
+.forgiveness-btn.decline {
+  background: var(--gradient-danger);
+  color: var(--white);
+  box-shadow: var(--shadow-danger-glow);
+}
+
+.forgiveness-btn.decline:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(255, 51, 102, 0.6);
+}
+
+.forgiveness-btn.decline::before {
+  content: '💸';
+  margin-right: var(--space-2);
+  font-size: var(--text-xl);
+}
+
+/* Alert Modal */
+.alert-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.alert-modal {
+  background: var(--gradient-dark);
+  border: 3px solid var(--danger);
+  border-radius: var(--radius-3xl);
+  padding: var(--space-12);
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: alertShake 0.6s ease-out;
+  box-shadow: var(--shadow-xl), 0 0 50px rgba(255, 51, 102, 0.5);
+}
+
+.alert-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-danger);
+  border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+  animation: pulse 2s infinite;
+}
+
+.alert-mascot {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-6);
+  animation: shameShake 0.5s ease-in-out infinite;
+  display: block;
+}
+
+.alert-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  color: var(--danger);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.alert-message {
+  color: var(--gray-300);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.6;
+  margin-bottom: var(--space-8);
+}
+
+.alert-close-btn {
+  padding: var(--space-4) var(--space-8);
+  background: var(--gradient-primary);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-2xl);
+  font-family: var(--font-family);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-glow);
+}
+
+.alert-close-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 212, 255, 0.6);
+}
+
+.alert-close-btn::before {
+  content: '😤';
+  margin-right: var(--space-2);
+  font-size: var(--text-xl);
+}
+
+/* Badge System */
+.badge-container {
+  position: fixed;
+  bottom: var(--space-6);
+  left: var(--space-6);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.achievement-badge {
+  background: var(--gradient-meme);
+  color: var(--black);
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-6);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(255, 215, 0, 0.8);
+  transform: translateY(100px) scale(0);
+  animation: badgeBounce 0.8s ease-out forwards, badgeFloat 2s ease-in-out infinite 1s;
+  pointer-events: auto;
+  cursor: pointer;
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--text-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.achievement-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shine 3s ease-in-out infinite;
+}
+
+.badge-icon {
+  margin-right: var(--space-2);
+  font-size: var(--text-lg);
+}
+
+/* Animations */
+@keyframes slideInBounce {
+  0% {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-20px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+}
+
+@keyframes modalBounce {
+  0% {
+    transform: scale(0.3) translateY(-50px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes alertShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+  20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+@keyframes badgeBounce {
+  0% {
+    transform: translateY(100px) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02); }
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .achievement-toast-container {
+    top: var(--space-4);
+    right: var(--space-4);
+    left: var(--space-4);
+  }
+  
+  .achievement-toast {
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .forgiveness-modal,
+  .alert-modal {
+    padding: var(--space-8);
+    margin: var(--space-4);
+  }
+  
+  .forgiveness-buttons {
+    flex-direction: column;
+  }
+  
+  .badge-container {
+    bottom: var(--space-4);
+    left: var(--space-4);
+    right: var(--space-4);
+  }
+}

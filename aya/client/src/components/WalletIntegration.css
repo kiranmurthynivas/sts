@@ -1,0 +1,451 @@
+/* Wallet & Charity Integration UI */
+
+.wallet-integration {
+  min-height: calc(100vh - var(--space-16));
+  background: var(--gradient-dark);
+  padding: var(--space-8) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-integration::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(130, 71, 229, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  animation: float 20s ease-in-out infinite;
+}
+
+.wallet-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  position: relative;
+  z-index: 1;
+}
+
+.wallet-header {
+  text-align: center;
+  margin-bottom: var(--space-16);
+  position: relative;
+}
+
+.wallet-mascot {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-4);
+  animation: float 3s ease-in-out infinite;
+  display: block;
+}
+
+.wallet-header h1 {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-weight-black);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wallet-header p {
+  color: var(--gray-300);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-6);
+}
+
+.wallet-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.wallet-status-card {
+  background: var(--gradient-dark);
+  border: 2px solid var(--gray-700);
+  border-radius: var(--radius-3xl);
+  padding: var(--space-8);
+  text-align: center;
+  transition: all var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-status-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--electric-blue);
+  box-shadow: var(--shadow-xl), var(--shadow-glow);
+}
+
+.wallet-status-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.wallet-status-card:hover::before {
+  opacity: 1;
+}
+
+.wallet-status-card.connected {
+  border-color: var(--success);
+  background: linear-gradient(135deg, var(--gradient-dark) 0%, rgba(0, 255, 136, 0.1) 100%);
+}
+
+.wallet-status-card.connected::before {
+  background: var(--gradient-success);
+}
+
+.wallet-status-card.disconnected {
+  border-color: var(--danger);
+  background: linear-gradient(135deg, var(--gradient-dark) 0%, rgba(255, 51, 102, 0.1) 100%);
+  animation: pulse 3s infinite;
+}
+
+.wallet-status-card.disconnected::before {
+  background: var(--gradient-danger);
+}
+
+.wallet-icon {
+  font-size: var(--text-5xl);
+  margin-bottom: var(--space-4);
+  display: block;
+}
+
+.wallet-status {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wallet-status.connected {
+  color: var(--success);
+}
+
+.wallet-status.disconnected {
+  color: var(--danger);
+}
+
+.wallet-address {
+  font-family: var(--font-family-mono);
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+  background: var(--gray-800);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+  word-break: break-all;
+}
+
+.wallet-balance {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--white);
+  margin-bottom: var(--space-2);
+}
+
+.balance-currency {
+  font-size: var(--text-sm);
+  color: var(--matic-purple);
+  font-weight: var(--font-weight-bold);
+}
+
+.connect-wallet-btn {
+  padding: var(--space-4) var(--space-8);
+  background: var(--gradient-primary);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-2xl);
+  font-family: var(--font-family);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  box-shadow: var(--shadow-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.connect-wallet-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 212, 255, 0.6);
+}
+
+.connect-wallet-btn::before {
+  content: '🔗';
+  margin-right: var(--space-2);
+  font-size: var(--text-xl);
+}
+
+.charity-section {
+  margin-bottom: var(--space-16);
+}
+
+.charity-header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.charity-header h2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-black);
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.charity-mascot {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-3);
+  animation: float 2.5s ease-in-out infinite;
+  display: block;
+}
+
+.charity-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-8);
+}
+
+.charity-card {
+  background: var(--gradient-dark);
+  border: 2px solid var(--gray-700);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  transition: all var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+
+.charity-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--success);
+  box-shadow: var(--shadow-xl), var(--shadow-success-glow);
+}
+
+.charity-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-success);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.charity-card:hover::before {
+  opacity: 1;
+}
+
+.charity-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.charity-amount {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  color: var(--success);
+}
+
+.charity-label {
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: var(--space-1);
+}
+
+.charity-transactions {
+  margin-bottom: var(--space-6);
+}
+
+.charity-transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--gray-700);
+}
+
+.charity-transaction:last-child {
+  border-bottom: none;
+}
+
+.transaction-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.transaction-emoji {
+  font-size: var(--text-xl);
+}
+
+.transaction-text {
+  font-size: var(--text-sm);
+  color: var(--gray-300);
+}
+
+.transaction-amount {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--danger);
+}
+
+.donate-button {
+  width: 100%;
+  padding: var(--space-4) var(--space-6);
+  background: var(--gradient-success);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-family);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+
+.donate-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-success-glow);
+}
+
+.donate-button::before {
+  content: '💝';
+  margin-right: var(--space-2);
+  font-size: var(--text-xl);
+}
+
+.encouragement-message {
+  background: var(--gradient-meme);
+  color: var(--black);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4) var(--space-6);
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-base);
+  margin-top: var(--space-4);
+  position: relative;
+}
+
+.encouragement-message::before {
+  content: '😬';
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  font-size: var(--text-xl);
+}
+
+.transaction-logs {
+  margin-top: var(--space-16);
+}
+
+.logs-header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.logs-header h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.transaction-log-card {
+  background: var(--gradient-dark);
+  border: 2px solid var(--gray-700);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+  transition: all var(--transition-normal);
+}
+
+.transaction-log-card:hover {
+  border-color: var(--electric-blue);
+  transform: translateX(var(--space-2));
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.log-type {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  color: var(--white);
+}
+
+.log-amount {
+  font-weight: var(--font-weight-black);
+  color: var(--matic-purple);
+}
+
+.log-description {
+  color: var(--gray-300);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-2);
+}
+
+.log-timestamp {
+  font-size: var(--text-xs);
+  color: var(--gray-500);
+  font-family: var(--font-family-mono);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .wallet-status-grid,
+  .charity-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .wallet-header h1 {
+    font-size: var(--text-4xl);
+  }
+  
+  .charity-header h2 {
+    font-size: var(--text-3xl);
+  }
+}

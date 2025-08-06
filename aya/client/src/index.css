@@ -1,0 +1,9 @@
+/* Base styles are now handled by design-system.css */
+
+code {
+  font-family: var(--font-family-mono);
+}
+
+#root {
+  min-height: 100vh;
+}
