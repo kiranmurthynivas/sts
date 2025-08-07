@@ -1,71 +1,154 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Habits from './pages/Habits';
-import Wallet from './pages/Wallet';
-import Transactions from './pages/Transactions';
-import AI from './pages/AI';
-import Profile from './pages/Profile';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ethers } from 'ethers';
+import Login from './components/Login';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+import CreateHabit from './components/CreateHabit';
+import HabitTracker from './components/HabitTracker';
+import WalletConnect from './components/WalletConnect';
+import './App.css';
 
 function App() {
-  const { user, loading } = useAuth();
+  const [user, setUser] = useState(null);
+  const [wallet, setWallet] = useState(null);
+  const [walletAddress, setWalletAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (loading) {
+  useEffect(() => {
+    // Check for existing token
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Verify token and set user
+      verifyToken(token);
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const verifyToken = async (token) => {
+    try {
+      // In a real app, you'd verify the token with your backend
+      // For now, we'll just check if it exists
+      if (token) {
+        // Decode JWT token (basic implementation)
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setUser({
+          id: payload.userId,
+          email: payload.email
+        });
+      }
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      localStorage.removeItem('token');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
+        const address = accounts[0];
+        
+        setWallet(provider);
+        setWalletAddress(address);
+        
+        // Listen for account changes
+        window.ethereum.on('accountsChanged', (accounts) => {
+          setWalletAddress(accounts[0] || '');
+        });
+        
+        return address;
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+        throw error;
+      }
+    } else {
+      throw new Error('MetaMask not found. Please install MetaMask extension.');
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    setWallet(null);
+    setWalletAddress('');
+    localStorage.removeItem('token');
+  };
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      {user && <Navbar />}
-      <div className="container mx-auto px-4 py-8">
+    <Router>
+      <div className="min-h-screen bg-dark-900 text-white">
         <Routes>
           <Route 
             path="/login" 
-            element={user ? <Navigate to="/dashboard" /> : <Login />} 
+            element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} />} 
           />
           <Route 
             path="/register" 
-            element={user ? <Navigate to="/dashboard" /> : <Register />} 
+            element={user ? <Navigate to="/dashboard" /> : <Register setUser={setUser} />} 
           />
           <Route 
             path="/dashboard" 
-            element={user ? <Dashboard /> : <Navigate to="/login" />} 
+            element={
+              user ? (
+                <Dashboard 
+                  user={user} 
+                  wallet={wallet}
+                  walletAddress={walletAddress}
+                  connectWallet={connectWallet}
+                  logout={logout}
+                />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
+          />
+          <Route 
+            path="/create-habit" 
+            element={
+              user ? (
+                <CreateHabit 
+                  user={user}
+                  wallet={wallet}
+                  walletAddress={walletAddress}
+                />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
           />
           <Route 
             path="/habits" 
-            element={user ? <Habits /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/wallet" 
-            element={user ? <Wallet /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/transactions" 
-            element={user ? <Transactions /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/ai" 
-            element={user ? <AI /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/profile" 
-            element={user ? <Profile /> : <Navigate to="/login" />} 
+            element={
+              user ? (
+                <HabitTracker 
+                  user={user}
+                  wallet={wallet}
+                  walletAddress={walletAddress}
+                />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } 
           />
           <Route 
             path="/" 
-            element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+            element={<Navigate to={user ? "/dashboard" : "/login"} />} 
           />
         </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
